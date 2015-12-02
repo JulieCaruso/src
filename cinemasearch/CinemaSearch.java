@@ -5,6 +5,8 @@
  */
 package cinemasearch;
 
+import java.util.ArrayList;
+import org.jsoup.nodes.Document;
 import parser.FileParser;
 
 /**
@@ -17,10 +19,9 @@ public class CinemaSearch {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
         FileParser p = new FileParser();
-        p.parseCorpus();
+        ArrayList<Document> Corpus = p.parseCorpus();
+        p.parseEmptyWords();
     }
     
 }

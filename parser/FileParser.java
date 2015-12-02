@@ -8,23 +8,31 @@ package parser;
  *
  * @author bideaud
  */
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class FileParser {
 
     private static String CORPUS_FOLDER = "CORPUS";
+    private static String EMPTYWORDS_FILE = "stopliste.txt";
 
     private ArrayList<Document> Corpus;
+    private HashMap<String, String> EmptyWords;
 
     public FileParser() {
         Corpus = new ArrayList<>();
+        EmptyWords = new HashMap<>();
     }
 
-    public Document parseFile(String filename) {
+    private Document parseFile(String filename) {
         File input = new File(filename);
         Document doc = new Document("");
         try {
@@ -44,5 +52,23 @@ public class FileParser {
             }
         }
         return this.Corpus;
+    }
+
+    public HashMap<String, String> parseEmptyWords() {
+        // lecture du fichier texte 
+        try {
+            InputStream ins = new FileInputStream(EMPTYWORDS_FILE);
+            InputStreamReader insr = new InputStreamReader(ins, "ISO-8859-1");
+            BufferedReader br = new BufferedReader(insr);
+            String ligne;
+
+            while ((ligne = br.readLine()) != null) {
+                EmptyWords.put(ligne, ligne);
+            }
+            br.close();
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+        return this.EmptyWords;
     }
 }
