@@ -22,10 +22,24 @@ public class CinemaSearch {
      */
     public static void main(String[] args) {
         FileParser p = new FileParser();
+        TextualInformation t = new TextualInformation();
+        
         ArrayList<Document> Corpus = p.parseCorpus();
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         TextualInformation ti = new TextualInformation();
         ti.generateWords(Corpus.get(0));
+        
+        ArrayList<String> a = new ArrayList<>();
+        a.add("Cheval,");
+        a.add(",");
+        a.add("chEvAline");
+        a.add("chevalinette");
+        t.truncate7(a);
+        t.minimize(a);
+        t.removePunctuation(a);
+        for (String w : a){
+            System.out.println(w);
+        }
     }
     
 }

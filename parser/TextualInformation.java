@@ -6,6 +6,8 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Pattern;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -15,6 +17,9 @@ import org.jsoup.select.Elements;
  * @author MC
  */
 public class TextualInformation {
+    
+    // espaces enlevés aussi
+    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;!?<>%]");
 
     public void generateWords(Document doc) {
         ArrayList<String> textList = new ArrayList();
@@ -28,4 +33,40 @@ public class TextualInformation {
 
         System.out.println(textList.toString());
     }
+
+    public void removeEmptyWords(HashMap<String, String> emptyWords, ArrayList<String> wordsList) {
+        for (int i = 0; i < wordsList.size(); i++) {
+            if (emptyWords.get(wordsList.get(i)) != null) {
+                wordsList.remove(i);
+            }
+        }
+    }
+
+    public void truncate7(ArrayList<String> wordsList) {
+        for (int i = 0; i < wordsList.size(); i++) {
+            if (wordsList.get(i).length() > 7) {
+                String truncated = wordsList.get(i).substring(0, 7);
+                wordsList.set(i, truncated);
+            }
+        }
+    }
+
+    public void minimize(ArrayList<String> wordsList) {
+        for (int i = 0; i < wordsList.size(); i++) {
+            String minimized = wordsList.get(i).toLowerCase();
+            wordsList.set(i, minimized);
+        }
+    }
+    
+    public void removePunctuation(ArrayList<String> wordsList) {
+        for (int i = 0; i < wordsList.size(); i++) {
+            String punctuationless = PUNCTUATION.matcher(wordsList.get(i)).replaceAll("");
+            if (punctuationless.length() > 0) {
+                wordsList.set(i, punctuationless);
+            } else {
+                wordsList.remove(i);
+            }
+        }
+    }
+
 }

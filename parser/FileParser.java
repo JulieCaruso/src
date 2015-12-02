@@ -21,8 +21,8 @@ import org.jsoup.nodes.Document;
 
 public class FileParser {
 
-    private static String CORPUS_FOLDER = "CORPUS";
-    private static String EMPTYWORDS_FILE = "stopliste.txt";
+    private static final String CORPUS_FOLDER = "CORPUS";
+    private static final String EMPTYWORDS_FILE = "stopliste.txt";
 
     private ArrayList<Document> Corpus;
     private HashMap<String, String> EmptyWords;
