@@ -28,11 +28,13 @@ public class CinemaSearch {
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
         ArrayList<String> a = new ArrayList<>();
-        a.add("Cheval");
+        a.add("Cheval,");
+        a.add(",");
         a.add("chEvAline");
         a.add("chevalinette");
         t.truncate7(a);
         t.minimize(a);
+        t.removePunctuation(a);
         for (String w : a){
             System.out.println(w);
         }
