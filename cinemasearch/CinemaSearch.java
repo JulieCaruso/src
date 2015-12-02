@@ -6,6 +6,7 @@
 package cinemasearch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.jsoup.nodes.Document;
 import parser.FileParser;
 
@@ -21,7 +22,7 @@ public class CinemaSearch {
     public static void main(String[] args) {
         FileParser p = new FileParser();
         ArrayList<Document> Corpus = p.parseCorpus();
-        p.parseEmptyWords();
+        HashMap<String, String> EmptyWords = p.parseEmptyWords();
     }
     
 }
