@@ -28,10 +28,11 @@ public class CinemaSearch {
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
         ArrayList<String> a = new ArrayList<>();
-        a.add("cheval");
-        a.add("chevaline");
+        a.add("Cheval");
+        a.add("chEvAline");
         a.add("chevalinette");
         t.truncate7(a);
+        t.minimize(a);
         for (String w : a){
             System.out.println(w);
         }
