@@ -6,6 +6,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -18,5 +19,13 @@ public class TextualInformation {
     public void generateWords(Document doc) {
         String text = doc.body().text();
         System.out.println(text);
+    }
+    
+    public void removeEmptyWords(HashMap<String, String> emptyWords, ArrayList<String> wordsList) {
+        for (int i = 0; i < wordsList.size(); i++) {
+            if (emptyWords.get(wordsList.get(i)) != null) {
+                wordsList.remove(i);
+            }
+        }
     }
 }
