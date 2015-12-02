@@ -5,6 +5,8 @@
  */
 package cinemasearch;
 
+import parser.FileParser;
+
 /**
  *
  * @author Kapouter
@@ -16,6 +18,9 @@ public class CinemaSearch {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        FileParser p = new FileParser();
+        p.parseCorpus();
     }
     
 }
