@@ -27,6 +27,14 @@ public class CinemaSearch {
         ArrayList<Document> Corpus = p.parseCorpus();
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
+        ArrayList<String> a = new ArrayList<>();
+        a.add("cheval");
+        a.add("chevaline");
+        a.add("chevalinette");
+        t.truncate7(a);
+        for (String w : a){
+            System.out.println(w);
+        }
     }
     
 }

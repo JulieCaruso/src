@@ -28,4 +28,13 @@ public class TextualInformation {
             }
         }
     }
+    
+    public void truncate7(ArrayList<String> wordsList) {
+        for (int i = 0; i < wordsList.size(); i++) {
+            if (wordsList.get(i).length() > 7) {
+                String truncated = wordsList.get(i).substring(0, 7);
+                wordsList.set(i, truncated);
+            }
+        }
+    }
 }
