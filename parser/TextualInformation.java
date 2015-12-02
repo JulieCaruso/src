@@ -5,10 +5,18 @@
  */
 package parser;
 
+import java.util.ArrayList;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 /**
  *
  * @author MC
  */
 public class TextualInformation {
     
+    public void generateWords(Document doc) {
+        String text = doc.body().text();
+        System.out.println(text);
+    }
 }
