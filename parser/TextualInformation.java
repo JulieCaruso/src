@@ -19,19 +19,23 @@ import org.jsoup.select.Elements;
 public class TextualInformation {
     
     // espaces enlevés aussi
-    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;!?<>%]");
+    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;:\\-!?<>%]");
 
-    public void generateWords(Document doc) {
+    public ArrayList<String> generateWords(Document doc) {
         ArrayList<String> textList = new ArrayList();
         String aux = "";
         Element head = doc.head();
         Elements elements = head.getAllElements();
         for (Element e : elements) {
             aux = e.text();
-            textList.add(aux);
+            String auxTab[] = aux.split(" ");
+            for (String w : auxTab) {
+                if (w.length() > 0) {
+                    textList.add(w);
+                }  
+            }      
         }
-
-        System.out.println(textList.toString());
+        return textList;
     }
 
     public void removeEmptyWords(HashMap<String, String> emptyWords, ArrayList<String> wordsList) {
