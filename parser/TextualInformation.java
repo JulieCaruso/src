@@ -8,15 +8,24 @@ package parser;
 import java.util.ArrayList;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
  * @author MC
  */
 public class TextualInformation {
-    
+
     public void generateWords(Document doc) {
-        String text = doc.body().text();
-        System.out.println(text);
+        ArrayList<String> textList = new ArrayList();
+        String aux = "";
+        Element head = doc.head();
+        Elements elements = head.getAllElements();
+        for (Element e : elements) {
+            aux = e.text();
+            textList.add(aux);
+        }
+
+        System.out.println(textList.toString());
     }
 }
