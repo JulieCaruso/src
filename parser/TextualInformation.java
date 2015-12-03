@@ -20,7 +20,29 @@ public class TextualInformation {
     
     // espaces enlevés aussi
     private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;:\\-!?<>%]");
-
+    
+    private ArrayList<ArrayList<String>> CorpusWords;
+    
+    public TextualInformation() {
+        this.CorpusWords = new ArrayList<>();
+    }
+    
+    public ArrayList<ArrayList<String>> generateCorpusWords(ArrayList<Document> corpus) {
+        for (Document document : corpus) {
+            this.CorpusWords.add(generateWords(document));
+        }
+        return this.CorpusWords;
+    }
+    
+    public void cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
+        for (ArrayList<String> documentWords : corpusWords) {
+            removeEmptyWords(emptyWords, documentWords);
+            truncate7(documentWords);
+            minimize(documentWords);
+            removePunctuation(documentWords);
+        }
+    }
+    
     public ArrayList<String> generateWords(Document doc) {
         ArrayList<String> textList = new ArrayList();
         String aux = "";

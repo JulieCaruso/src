@@ -24,12 +24,26 @@ public class FileParser {
     private static final String CORPUS_FOLDER = "CORPUS";
     private static final String EMPTYWORDS_FILE = "stopliste.txt";
 
+    private ArrayList<String> CorpusTitles;
     private ArrayList<Document> Corpus;
     private HashMap<String, String> EmptyWords;
 
     public FileParser() {
-        Corpus = new ArrayList<>();
-        EmptyWords = new HashMap<>();
+        this.CorpusTitles = new ArrayList<>();
+        this.Corpus = new ArrayList<>();
+        this.EmptyWords = new HashMap<>();
+    }
+    
+    public ArrayList<String> getCorpusTitles() {
+        return this.CorpusTitles;
+    }
+    
+    public ArrayList<Document> getCorpus() {
+        return this.Corpus;
+    }
+    
+    public HashMap<String, String> getEmptyWords() {
+        return this.EmptyWords;
     }
 
     private Document parseFile(String filename) {
@@ -48,7 +62,8 @@ public class FileParser {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                Corpus.add(parseFile(child.getAbsolutePath()));
+                this.CorpusTitles.add(child.getName());
+                this.Corpus.add(parseFile(child.getAbsolutePath()));
             }
         }
         return this.Corpus;
@@ -63,7 +78,7 @@ public class FileParser {
             String ligne;
 
             while ((ligne = br.readLine()) != null) {
-                EmptyWords.put(ligne, ligne);
+                this.EmptyWords.put(ligne, ligne);
             }
             br.close();
         } catch (Exception e) {
