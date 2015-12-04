@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 public class TextualInformation {
     
     // espaces enlevés aussi
-    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;:\\-!?<>%]");
+    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>%€]");
     
     private ArrayList<ArrayList<String>> CorpusWords;
     
@@ -44,20 +44,31 @@ public class TextualInformation {
     }
     
     public ArrayList<String> generateWords(Document doc) {
-        ArrayList<String> textList = new ArrayList();
+        ArrayList<String> wordsList = new ArrayList();
         String aux = "";
         Element head = doc.head();
-        Elements elements = head.getAllElements();
-        for (Element e : elements) {
+        Elements elementsHead = head.getAllElements();
+        for (Element e : elementsHead) {
             aux = e.text();
-            String auxTab[] = aux.split(" ");
+            String auxTab[] = aux.split(PUNCTUATION.toString());
             for (String w : auxTab) {
                 if (w.length() > 0) {
-                    textList.add(w);
+                    wordsList.add(w);
                 }  
             }      
         }
-        return textList;
+        Element body = doc.body();
+        Elements elementsBody = body.getAllElements();
+        for (Element e : elementsBody) {
+            aux = e.text();
+            String auxTab[] = aux.split(PUNCTUATION.toString());
+            for (String w : auxTab) {
+                if (w.length() > 0) {
+                    wordsList.add(w);
+                }  
+            }      
+        }
+        return wordsList;
     }
 
     public void removeEmptyWords(HashMap<String, String> emptyWords, ArrayList<String> wordsList) {
@@ -92,7 +103,7 @@ public class TextualInformation {
             } else {
                 wordsList.remove(i);
             }
-        }
+        }    
     }
 
 }

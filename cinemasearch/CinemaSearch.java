@@ -30,13 +30,13 @@ public class CinemaSearch {
         ArrayList<String> a = new ArrayList<>();
         a.add("Cheval,");
         a.add(",");
-        a.add("chEvAline");
+        a.add("chEvA,line");
         a.add("chevalinette");
         
         a = ti.generateWords(Corpus.get(0));
         ti.truncate7(a);
         ti.minimize(a);
-        ti.removePunctuation(a);
+        //ti.removePunctuation(a);
         for (String w : a){
             System.out.println(w);
         }
