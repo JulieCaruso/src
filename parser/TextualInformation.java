@@ -17,23 +17,23 @@ import org.jsoup.select.Elements;
  * @author MC
  */
 public class TextualInformation {
-    
+
     // espaces enlevés aussi
     private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>'%€–/[0-9]©]");
-    
+
     private ArrayList<ArrayList<String>> CorpusWords;
-    
+
     public TextualInformation() {
         this.CorpusWords = new ArrayList<>();
     }
-    
+
     public ArrayList<ArrayList<String>> generateCorpusWords(ArrayList<Document> corpus) {
         for (Document document : corpus) {
             this.CorpusWords.add(generateWords(document));
         }
         return this.CorpusWords;
     }
-    
+
     public void cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
         for (ArrayList<String> documentWords : corpusWords) {
             removeEmptyWords(emptyWords, documentWords);
@@ -42,31 +42,41 @@ public class TextualInformation {
             //removePunctuation(documentWords);
         }
     }
-    
-    public ArrayList<String> generateWords(Document doc) {
+
+    public ArrayList<String> splitWords(Element e) {
         ArrayList<String> wordsList = new ArrayList();
         String aux = "";
-        Element head = doc.head();
-        Elements elementsHead = head.getAllElements();
-        for (Element e : elementsHead) {
-            aux = e.text();
+        if (e.nodeName().equals("meta")) {
+            aux = e.attr("content");
             String auxTab[] = aux.split(PUNCTUATION.toString());
             for (String w : auxTab) {
                 if (w.length() > 0) {
                     wordsList.add(w);
-                }  
-            }      
+                }
+            }
+        }
+        aux = e.text();
+        String auxTab[] = aux.split(PUNCTUATION.toString());
+        for (String w : auxTab) {
+            if (w.length() > 0) {
+                wordsList.add(w);
+            }
+        }
+        return wordsList;
+    }
+
+    public ArrayList<String> generateWords(Document doc) {
+        ArrayList<String> wordsList = new ArrayList();
+
+        Element head = doc.head();
+        Elements elementsHead = head.getAllElements();
+        for (Element e : elementsHead) {
+            wordsList.addAll(splitWords(e)); 
         }
         Element body = doc.body();
         Elements elementsBody = body.getAllElements();
         for (Element e : elementsBody) {
-            aux = e.text();
-            String auxTab[] = aux.split(PUNCTUATION.toString());
-            for (String w : auxTab) {
-                if (w.length() > 0) {
-                    wordsList.add(w);
-                }  
-            }      
+            wordsList.addAll(splitWords(e));
         }
         return wordsList;
     }
@@ -94,7 +104,7 @@ public class TextualInformation {
             wordsList.set(i, minimized);
         }
     }
-    
+
     public void removePunctuation(ArrayList<String> wordsList) {
         for (int i = 0; i < wordsList.size(); i++) {
             String punctuationless = PUNCTUATION.matcher(wordsList.get(i)).replaceAll("");
@@ -103,7 +113,7 @@ public class TextualInformation {
             } else {
                 wordsList.remove(i);
             }
-        }    
+        }
     }
 
 }
