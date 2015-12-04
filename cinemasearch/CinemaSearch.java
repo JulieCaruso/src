@@ -36,7 +36,7 @@ public class CinemaSearch {
         a = ti.generateWords(Corpus.get(0));
         ti.truncate7(a);
         ti.minimize(a);
-        //ti.removePunctuation(a);
+        ti.removeEmptyWords(EmptyWords, a);
         for (String w : a){
             System.out.println(w);
         }
