@@ -39,8 +39,8 @@ public class CinemaSearch {
         ArrayList<Document> Corpus = p.parseCorpus();
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-        ArrayList<ArrayList<String>> docsWordsList = new ArrayList<>();       
-        docsWordsList = ti.generateCorpusWords(Corpus);
+        ArrayList<ArrayList<String>> docsWordsList = ti.generateCorpusWords(Corpus);
+        
         ti.cleanCorpusWords(EmptyWords, docsWordsList);
         ArrayList<String> a = new ArrayList<>();
         a = docsWordsList.get(0);

@@ -16,20 +16,21 @@ import java.util.logging.Logger;
  * @author Kapouter
  */
 public class DocumentMot {
+
     private Connection conn;
 
     public DocumentMot(Connection connection) {
         this.conn = connection;
     }
 
-    public void insert(int id_document, int id_mot) {
+    public void insert(int id_document, int id_mot, int tf) {
         Statement stmt = null;
         String sql = null;
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO document_mot (id_document, id_mot) VALUES (" + id_document + ", '" + id_mot + "')";;
-            stmt.execute(sql);
-            stmt.close();    
+            sql = "INSERT INTO document_mot (id_document, id_mot, tf) VALUES (" + id_document + ", '" + id_mot + "', " + tf + ")";;
+            stmt.executeUpdate(sql);
+            stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(DocumentMot.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -41,5 +42,5 @@ public class DocumentMot {
             }
         }
     }
-    
+
 }
