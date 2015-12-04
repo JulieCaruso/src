@@ -39,7 +39,7 @@ public class TextualInformation {
             removeEmptyWords(emptyWords, documentWords);
             truncate7(documentWords);
             minimize(documentWords);
-            removePunctuation(documentWords);
+            //removePunctuation(documentWords);
         }
     }
     

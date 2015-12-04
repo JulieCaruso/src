@@ -27,20 +27,15 @@ public class CinemaSearch {
         ArrayList<Document> Corpus = p.parseCorpus();
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-        ArrayList<String> a = new ArrayList<>();
-        a.add("Cheval,");
-        a.add(",");
-        a.add("chEvA,line");
-        a.add("chevalinette");
-        
+        ArrayList<String> a = new ArrayList<>();       
         a = ti.generateWords(Corpus.get(0));
         ti.truncate7(a);
         ti.minimize(a);
+        ti.removeEmptyWords(EmptyWords, a);
         //ti.removePunctuation(a);
         for (String w : a){
             System.out.println(w);
         }
-        // le - ????§§§!!!!
     }
     
 }
