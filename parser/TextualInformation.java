@@ -36,10 +36,9 @@ public class TextualInformation {
 
     public void cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
         for (ArrayList<String> documentWords : corpusWords) {
+            minimize(documentWords);
             removeEmptyWords(emptyWords, documentWords);
             truncate7(documentWords);
-            minimize(documentWords);
-            //removePunctuation(documentWords);
         }
     }
 
@@ -55,11 +54,13 @@ public class TextualInformation {
                 }
             }
         }
-        aux = e.text();
-        String auxTab[] = aux.split(PUNCTUATION.toString());
-        for (String w : auxTab) {
-            if (w.length() > 0) {
-                wordsList.add(w);
+        else {
+            aux = e.text();
+            String auxTab[] = aux.split(PUNCTUATION.toString());
+            for (String w : auxTab) {
+                if (w.length() > 0) {
+                    wordsList.add(w);
+                }
             }
         }
         return wordsList;
