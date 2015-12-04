@@ -10,6 +10,9 @@ import java.util.HashMap;
 import org.jsoup.nodes.Document;
 import parser.FileParser;
 import parser.TextualInformation;
+import db.DbConnection;
+import java.sql.Connection;
+import model.*;
 
 /**
  *
@@ -21,6 +24,15 @@ public class CinemaSearch {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        DbConnection dbConn = new DbConnection();
+        dbConn.connectToDb();
+        Connection conn = dbConn.getConnection();
+        
+        Documents docModel = new Documents(conn);
+        Mots motModel = new Mots(conn);
+        DocumentMot docMotModel = new DocumentMot(conn);
+        
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
         
@@ -35,6 +47,8 @@ public class CinemaSearch {
         for (String w : a){
             System.out.println(w);
         }
+        
+        dbConn.disconnectDb(conn);
     }
     
 }
