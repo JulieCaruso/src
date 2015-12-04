@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 public class TextualInformation {
     
     // espaces enlevés aussi
-    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>%€]");
+    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>'%€–/[0-9]©]");
     
     private ArrayList<ArrayList<String>> CorpusWords;
     
