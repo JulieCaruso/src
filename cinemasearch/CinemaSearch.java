@@ -14,6 +14,7 @@ import parser.TextFrequency;
 import db.DbConnection;
 import java.sql.Connection;
 import model.*;
+import search.Search;
 
 /**
  *
@@ -37,6 +38,7 @@ public class CinemaSearch {
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
         TextFrequency tf = new TextFrequency();
+        Search s = new Search();
         
         ArrayList<Document> Corpus = p.parseCorpus(docModel);
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
@@ -52,6 +54,14 @@ public class CinemaSearch {
         for (String w : a){
             System.out.println(w);
         }
+        
+        // essai requete
+        ArrayList<String> r = new ArrayList<>();
+        HashMap<String,Double> cosDoc = new HashMap<>();
+        r.add("personn");
+        r.add("intouch");
+        cosDoc = s.vectorialSearch(p.getCorpusTitles(), r, docModel, motModel, docMotModel);
+        System.out.println(cosDoc);
         
         dbConn.disconnectDb(conn);
     }
