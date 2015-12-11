@@ -38,4 +38,6 @@ public class Search {
         return cosDoc;
     }
     
+    // seuil pour la pertinence des documents !!!!!!!!!!!!!!!!!!!!!!
+    
 }

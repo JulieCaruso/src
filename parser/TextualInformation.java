@@ -19,46 +19,35 @@ import org.jsoup.select.Elements;
  */
 public class TextualInformation {
 
-
     // pattern pour regexp
     private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/=©]");
 
     private ArrayList<ArrayList<String>> CorpusWords;
 
-    /* constructeur*/ 
+    /* constructeur*/
     public TextualInformation() {
         this.CorpusWords = new ArrayList<>();
     }
 
-    /* retourne tous les mots non nettoyes */
+    /**
+     * Retourne tous les mots d'un corpus non nettoyés
+     *
+     * @param corpus
+     * @return liste des mots par document
+     */
     public ArrayList<ArrayList<String>> generateCorpusWords(ArrayList<Document> corpus) {
         for (Document document : corpus) {
             this.CorpusWords.add(generateWords(document));
         }
         return this.CorpusWords;
     }
-    
-    /* insere le corpus nettoye de mots dans la base de donnees */ 
-    public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {     
-        for (int i = 0; i < corpusWords.size(); i++) {
-            ArrayList<String> documentWords = corpusWords.get(i);
-            for (String words : documentWords) {
-                motsDB.insertIfNotPresent(words);
-            }
-        }
-    }
 
-    /* retourne le corpus nettoye de tous les mots */
-    public ArrayList<ArrayList<String>> cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
-        for (ArrayList<String> documentWords : corpusWords) {
-            minimize(documentWords);
-            removeEmptyWords(emptyWords, documentWords);
-            truncate7(documentWords);
-        }
-        return corpusWords;
-    }
-    
-    /* generation de la liste de mots pour 1 document */
+    /**
+     * Generation de la liste de mots pour un document
+     *
+     * @param doc
+     * @return liste des mots
+     */
     public ArrayList<String> generateWords(Document doc) {
         ArrayList<String> wordsList = new ArrayList();
 
@@ -75,7 +64,11 @@ public class TextualInformation {
         return wordsList;
     }
 
-    /* separation des mots en fonction de la ponctuation */
+    /**
+     * Separation des mots en fonction de la ponctuation
+     * @param e
+     * @return liste des mots
+     */
     public ArrayList<String> splitWords(Element e) {
         ArrayList<String> wordsList = new ArrayList();
         String aux = "";
@@ -87,8 +80,7 @@ public class TextualInformation {
                     wordsList.add(w);
                 }
             }
-        }
-        else {
+        } else {
             aux = e.text();
             String auxTab[] = aux.split(PUNCTUATION.toString());
             for (String w : auxTab) {
@@ -100,7 +92,21 @@ public class TextualInformation {
         return wordsList;
     }
 
-
+    /**
+     * Retourne le corpus nettoye de tous les mots
+     *
+     * @param emptyWords hashmap des mots vides
+     * @param corpusWords liste des mots par document
+     * @return listes des mots nettoyés par document
+     */
+    public ArrayList<ArrayList<String>> cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
+        for (ArrayList<String> documentWords : corpusWords) {
+            minimize(documentWords);
+            removeEmptyWords(emptyWords, documentWords);
+            truncate7(documentWords);
+        }
+        return corpusWords;
+    }
 
     public void removeEmptyWords(HashMap<String, String> emptyWords, ArrayList<String> wordsList) {
         for (int i = 0; i < wordsList.size(); i++) {
@@ -135,6 +141,40 @@ public class TextualInformation {
                 wordsList.remove(i);
             }
         }
+    }
+
+    /**
+     * Insere le corpus nettoye de mots dans la base de donnees
+     *
+     * @param motsDB
+     * @param corpusWords
+     */
+    public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {
+        for (int i = 0; i < corpusWords.size(); i++) {
+            ArrayList<String> documentWords = corpusWords.get(i);
+            for (String words : documentWords) {
+                motsDB.insertIfNotPresent(words);
+            }
+        }
+    }
+
+    /**
+     * Parse la requete et retourne une liste de mots
+     * @param emptyWords hashmap des mots vides
+     * @param req requete
+     * @return liste des mots de la requete
+     */
+    public ArrayList<String> parseRequete(HashMap<String, String> emptyWords, String req) {
+        ArrayList<String> rq = new ArrayList<>();
+        String[] r = req.split(" ");
+        for (String word : r) {
+            rq.add(word);
+        }
+        removePunctuation(rq);
+        minimize(rq);
+        removeEmptyWords(emptyWords, rq);
+        truncate7(rq);
+        return rq;
     }
 
 }

@@ -27,41 +27,40 @@ public class CinemaSearch {
      */
     public static void main(String[] args) {
         
+        // connection base de données
         DbConnection dbConn = new DbConnection();
         dbConn.connectToDb();
         Connection conn = dbConn.getConnection();
-        
+        // création des modèles des tables
         Documents docModel = new Documents(conn);
         Mots motModel = new Mots(conn);
         DocumentMot docMotModel = new DocumentMot(conn);
-        
+        // instanciation des outils
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
         TextFrequency tf = new TextFrequency();
         Search s = new Search();
-        
+        // Parsing corpus et empty words
         ArrayList<Document> Corpus = p.parseCorpus(docModel);
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
+        // Parsing et nettoyage des mots du corpus
         ArrayList<ArrayList<String>> docsWordsList = ti.generateCorpusWords(Corpus);
         ArrayList<ArrayList<String>> cleanWordsList = ti.cleanCorpusWords(EmptyWords, docsWordsList);
      
-        ti.insertCorpusWordsInDB(motModel, cleanWordsList);
-        tf.insertDocMot(motModel, docModel, docMotModel, p.getCorpusTitles(), cleanWordsList);
+        //Ajout des mots du corpus et du lien doc-mot en base de données
+//        ti.insertCorpusWordsInDB(motModel, cleanWordsList);
+//        tf.insertDocMot(motModel, docModel, docMotModel, p.getCorpusTitles(), cleanWordsList);
         
-        ArrayList<String> a = new ArrayList<>();
-        a = cleanWordsList.get(0);
-        for (String w : a){
-            System.out.println(w);
-        }
         
         // essai requete
-        ArrayList<String> r = new ArrayList<>();
-        HashMap<String,Double> cosDoc = new HashMap<>();
-        r.add("personn");
-        r.add("intouch");
-        cosDoc = s.vectorialSearch(p.getCorpusTitles(), r, docModel, motModel, docMotModel);
-        System.out.println(cosDoc);
+        String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
+        ArrayList<String> rq = ti.parseRequete(EmptyWords, req);
+        for (String w : rq) {
+            System.out.println(w);
+        }
+//        HashMap<String,Double> cosDoc = s.vectorialSearch(p.getCorpusTitles(), rq, docModel, motModel, docMotModel);
+//        System.out.println(cosDoc);
         
         dbConn.disconnectDb(conn);
     }
