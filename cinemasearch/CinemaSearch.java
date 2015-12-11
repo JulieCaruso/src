@@ -48,7 +48,7 @@ public class CinemaSearch {
             System.out.println(w);
         }
         
-        //dbConn.disconnectDb(conn);
+        dbConn.disconnectDb(conn);
     }
     
 }

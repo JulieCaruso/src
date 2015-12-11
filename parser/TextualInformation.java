@@ -38,7 +38,7 @@ public class TextualInformation {
     public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {
         for (ArrayList<String> documentWords : corpusWords) {
             for (String words : documentWords) {
-                motsDB.insert(words);
+                motsDB.insertIfNotPresent(words);
             }
         }
     }
