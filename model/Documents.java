@@ -22,6 +22,31 @@ public class Documents {
         this.nextId = 1;
         this.conn = connection;
     }
+    
+    public int getId(String name) {
+        int id = 0;
+        Statement stmt = null;
+        String sql = null;
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM documents WHERE name_document LIKE '" + name + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                id = rs.getInt("id_document");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Mots.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+        }
+        return id;
+    }
 
     public void insert(String doc_name) {
         Statement stmt = null;

@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import model.Documents;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -57,13 +58,14 @@ public class FileParser {
         return doc;
     }
 
-    public ArrayList<Document> parseCorpus() {
+    public ArrayList<Document> parseCorpus(Documents docModel) {
         File dir = new File(CORPUS_FOLDER);
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
                 this.CorpusTitles.add(child.getName());
                 this.Corpus.add(parseFile(child.getAbsolutePath()));
+                docModel.insert(child.getName());
             }
         }
         return this.Corpus;

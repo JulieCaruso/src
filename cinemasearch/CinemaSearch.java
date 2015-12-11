@@ -10,6 +10,7 @@ import java.util.HashMap;
 import org.jsoup.nodes.Document;
 import parser.FileParser;
 import parser.TextualInformation;
+import parser.TextFrequency;
 import db.DbConnection;
 import java.sql.Connection;
 import model.*;
@@ -35,13 +36,16 @@ public class CinemaSearch {
         
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
+        TextFrequency tf = new TextFrequency();
         
-        ArrayList<Document> Corpus = p.parseCorpus();
+        ArrayList<Document> Corpus = p.parseCorpus(docModel);
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
         ArrayList<ArrayList<String>> docsWordsList = ti.generateCorpusWords(Corpus);
-        
+     
         ti.insertCorpusWordsInDB(motModel, ti.cleanCorpusWords(EmptyWords, docsWordsList));
+        tf.insertDocMot(motModel, docModel, docMotModel, p.getCorpusTitles(), docsWordsList);
+        
         ArrayList<String> a = new ArrayList<>();
         a = docsWordsList.get(0);
         for (String w : a){

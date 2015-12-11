@@ -8,6 +8,7 @@ package parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+import model.DocumentMot;
 import model.Mots;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,7 +21,7 @@ import org.jsoup.select.Elements;
 public class TextualInformation {
 
     // espaces enlevés aussi
-    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>'%€–/[0-9]©]");
+    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/[0-9]©]");
 
     private ArrayList<ArrayList<String>> CorpusWords;
 
@@ -35,8 +36,9 @@ public class TextualInformation {
         return this.CorpusWords;
     }
     
-    public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {
-        for (ArrayList<String> documentWords : corpusWords) {
+    public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {     
+        for (int i = 0; i < corpusWords.size(); i++) {
+            ArrayList<String> documentWords = corpusWords.get(i);
             for (String words : documentWords) {
                 motsDB.insertIfNotPresent(words);
             }

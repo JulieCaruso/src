@@ -7,6 +7,9 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import model.DocumentMot;
+import model.Documents;
+import model.Mots;
 
 /**
  *
@@ -20,7 +23,7 @@ public class TextFrequency {
         this.tfMap = new ArrayList<>();
     }
 
-    public void createTfMap(ArrayList<ArrayList<String>> docsWordsList) {
+    private void createTfMap(ArrayList<ArrayList<String>> docsWordsList) {
         for (ArrayList<String> wordsList : docsWordsList) {
             HashMap<String, Integer> wordsMap = new HashMap<>();
             for (String word : wordsList) {
@@ -33,6 +36,21 @@ public class TextFrequency {
             }
             this.tfMap.add(wordsMap);
         }
+    }
+    
+    public void insertDocMot (Mots motModel, Documents docModel, DocumentMot docMotModel, ArrayList<String> CorpusTitles, ArrayList<ArrayList<String>> docsWordsList) {
+        createTfMap(docsWordsList);
+        for (int i = 0; i < this.tfMap.size(); i++) {
+            HashMap<String, Integer> wordsMap = tfMap.get(i);
+            for (String mot : wordsMap.keySet()) {
+                int id_mot = motModel.getId(mot);
+                int id_document = docModel.getId(CorpusTitles.get(i));
+                docMotModel.insert(id_document, id_mot, wordsMap.get(mot));
+            }
+        }
+        
+        
+        
     }
 
 }
