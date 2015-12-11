@@ -8,6 +8,7 @@ package parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+import model.Mots;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -33,13 +34,22 @@ public class TextualInformation {
         }
         return this.CorpusWords;
     }
+    
+    public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {
+        for (ArrayList<String> documentWords : corpusWords) {
+            for (String words : documentWords) {
+                motsDB.insert(words);
+            }
+        }
+    }
 
-    public void cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
+    public ArrayList<ArrayList<String>> cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
         for (ArrayList<String> documentWords : corpusWords) {
             minimize(documentWords);
             removeEmptyWords(emptyWords, documentWords);
             truncate7(documentWords);
         }
+        return corpusWords;
     }
 
     public ArrayList<String> splitWords(Element e) {

@@ -41,14 +41,14 @@ public class CinemaSearch {
         
         ArrayList<ArrayList<String>> docsWordsList = ti.generateCorpusWords(Corpus);
         
-        ti.cleanCorpusWords(EmptyWords, docsWordsList);
+        ti.insertCorpusWordsInDB(motModel, ti.cleanCorpusWords(EmptyWords, docsWordsList));
         ArrayList<String> a = new ArrayList<>();
         a = docsWordsList.get(0);
         for (String w : a){
             System.out.println(w);
         }
         
-        dbConn.disconnectDb(conn);
+        //dbConn.disconnectDb(conn);
     }
     
 }
