@@ -42,12 +42,13 @@ public class CinemaSearch {
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
         ArrayList<ArrayList<String>> docsWordsList = ti.generateCorpusWords(Corpus);
+        ArrayList<ArrayList<String>> cleanWordsList = ti.cleanCorpusWords(EmptyWords, docsWordsList);
      
-        ti.insertCorpusWordsInDB(motModel, ti.cleanCorpusWords(EmptyWords, docsWordsList));
-        tf.insertDocMot(motModel, docModel, docMotModel, p.getCorpusTitles(), docsWordsList);
+        ti.insertCorpusWordsInDB(motModel, cleanWordsList);
+        tf.insertDocMot(motModel, docModel, docMotModel, p.getCorpusTitles(), cleanWordsList);
         
         ArrayList<String> a = new ArrayList<>();
-        a = docsWordsList.get(0);
+        a = cleanWordsList.get(0);
         for (String w : a){
             System.out.println(w);
         }

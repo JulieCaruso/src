@@ -19,14 +19,22 @@ import org.jsoup.select.Elements;
  */
 public class TextualInformation {
 
+<<<<<<< Updated upstream
     // pattern pour regexp
     private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/[0-9]©]");
+=======
+    // espaces enlevés aussi
+    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/=©]");
+
+>>>>>>> Stashed changes
     private ArrayList<ArrayList<String>> CorpusWords;
 
+    /* constructeur*/ 
     public TextualInformation() {
         this.CorpusWords = new ArrayList<>();
     }
 
+    /* retourne tous les mots non nettoyes */
     public ArrayList<ArrayList<String>> generateCorpusWords(ArrayList<Document> corpus) {
         for (Document document : corpus) {
             this.CorpusWords.add(generateWords(document));
@@ -34,6 +42,7 @@ public class TextualInformation {
         return this.CorpusWords;
     }
     
+    /* insere le corpus nettoye de mots dans la base de donnees */ 
     public void insertCorpusWordsInDB(Mots motsDB, ArrayList<ArrayList<String>> corpusWords) {     
         for (int i = 0; i < corpusWords.size(); i++) {
             ArrayList<String> documentWords = corpusWords.get(i);
@@ -43,6 +52,7 @@ public class TextualInformation {
         }
     }
 
+    /* retourne le corpus nettoye de tous les mots */
     public ArrayList<ArrayList<String>> cleanCorpusWords(HashMap<String, String> emptyWords, ArrayList<ArrayList<String>> corpusWords) {
         for (ArrayList<String> documentWords : corpusWords) {
             minimize(documentWords);
@@ -51,7 +61,25 @@ public class TextualInformation {
         }
         return corpusWords;
     }
+    
+    /* generation de la liste de mots pour 1 document */
+    public ArrayList<String> generateWords(Document doc) {
+        ArrayList<String> wordsList = new ArrayList();
 
+        Element head = doc.head();
+        Elements elementsHead = head.getAllElements();
+        for (Element e : elementsHead) {
+            wordsList.addAll(splitWords(e));
+        }
+        Element body = doc.body();
+        Elements elementsBody = body.getAllElements();
+        for (Element e : elementsBody) {
+            wordsList.addAll(splitWords(e));
+        }
+        return wordsList;
+    }
+
+    /* separation des mots en fonction de la ponctuation */
     public ArrayList<String> splitWords(Element e) {
         ArrayList<String> wordsList = new ArrayList();
         String aux = "";
@@ -76,21 +104,7 @@ public class TextualInformation {
         return wordsList;
     }
 
-    public ArrayList<String> generateWords(Document doc) {
-        ArrayList<String> wordsList = new ArrayList();
 
-        Element head = doc.head();
-        Elements elementsHead = head.getAllElements();
-        for (Element e : elementsHead) {
-            wordsList.addAll(splitWords(e)); 
-        }
-        Element body = doc.body();
-        Elements elementsBody = body.getAllElements();
-        for (Element e : elementsBody) {
-            wordsList.addAll(splitWords(e));
-        }
-        return wordsList;
-    }
 
     public void removeEmptyWords(HashMap<String, String> emptyWords, ArrayList<String> wordsList) {
         for (int i = 0; i < wordsList.size(); i++) {

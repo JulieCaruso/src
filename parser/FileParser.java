@@ -25,6 +25,7 @@ public class FileParser {
     private static final String CORPUS_FOLDER = "CORPUS";
     private static final String EMPTYWORDS_FILE = "stopliste.txt";
 
+    /* Noms des documents */
     private ArrayList<String> CorpusTitles;
     private ArrayList<Document> Corpus;
     private HashMap<String, String> EmptyWords;
