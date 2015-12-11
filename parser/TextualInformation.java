@@ -19,14 +19,10 @@ import org.jsoup.select.Elements;
  */
 public class TextualInformation {
 
-<<<<<<< Updated upstream
+
     // pattern pour regexp
-    private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/[0-9]©]");
-=======
-    // espaces enlevés aussi
     private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/=©]");
 
->>>>>>> Stashed changes
     private ArrayList<ArrayList<String>> CorpusWords;
 
     /* constructeur*/ 
