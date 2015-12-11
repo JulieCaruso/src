@@ -17,6 +17,7 @@ public class Search {
         // calcul de la dist de cos pour chaque doc/req (x docs, 1 req)
         // = |D & Q|/(sqrt(|D|)*sqrt(|Q|))
         // 
+        //comme
     }
     
 }
