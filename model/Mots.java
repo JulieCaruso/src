@@ -24,6 +24,7 @@ public class Mots {
     public Mots(Connection connection) {
         this.nextId = 1;
         this.conn = connection;
+        truncate();
     }
 
     /**
@@ -113,6 +114,29 @@ public class Mots {
             Logger.getLogger(Mots.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             Mots.nextId++;
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+        }
+    }
+    
+    /**
+     * Truncate the table
+     */
+    public void truncate() {
+        Statement stmt = null;
+        String sql = null;
+        try {
+            stmt = conn.createStatement();
+            sql = "TRUNCATE mots";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Documents.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
             try {
                 if (stmt != null) {
                     stmt.close();

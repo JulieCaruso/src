@@ -19,6 +19,7 @@ public class DocumentMot {
 
     public DocumentMot(Connection connection) {
         this.conn = connection;
+        truncate();
     }
 
     /**
@@ -126,6 +127,29 @@ public class DocumentMot {
             }
         }
         return result;
+    }
+    
+    /**
+     * Truncate the table
+     */
+    public void truncate() {
+        Statement stmt = null;
+        String sql = null;
+        try {
+            stmt = conn.createStatement();
+            sql = "TRUNCATE document_mot";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Documents.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+        }
     }
 
 }

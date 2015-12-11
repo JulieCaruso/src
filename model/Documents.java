@@ -21,10 +21,12 @@ public class Documents {
     public Documents(Connection connection) {
         this.nextId = 1;
         this.conn = connection;
+        truncate();
     }
-    
+
     /**
      * Renvoie l'id d'un document
+     *
      * @param name nom du document
      * @return id_document
      */
@@ -55,6 +57,7 @@ public class Documents {
 
     /**
      * Insère un document dans documents
+     *
      * @param doc_name nom du document
      */
     public void insert(String doc_name) {
@@ -62,13 +65,36 @@ public class Documents {
         String sql = null;
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO documents (name_document) VALUES ('" + doc_name + "')";;
+            sql = "INSERT INTO documents (name_document) VALUES ('" + doc_name + "')";
             stmt.execute(sql);
-            stmt.close();    
+            stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(Documents.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             Documents.nextId++;
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+        }
+    }
+
+    /**
+     * Truncate the table
+     */
+    public void truncate() {
+        Statement stmt = null;
+        String sql = null;
+        try {
+            stmt = conn.createStatement();
+            sql = "TRUNCATE documents";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Documents.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
             try {
                 if (stmt != null) {
                     stmt.close();
