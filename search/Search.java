@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class Search {
     
     public void vectorialSearch(ArrayList<ArrayList<String>> docsWordsList, ArrayList<String> wordsReq) {
+        // calcul de la dist de cos pour chaque doc/req (x docs, 1 req)
+        // = |D & Q|/(sqrt(|D|)*sqrt(|Q|))
         // 
     }
     
