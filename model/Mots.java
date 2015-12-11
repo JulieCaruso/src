@@ -26,6 +26,11 @@ public class Mots {
         this.conn = connection;
     }
 
+    /**
+     * Renvoie l'id du mot
+     * @param mot
+     * @return id
+     */
     public int getId(String mot) {
         int id = 0;
         Statement stmt = null;
@@ -51,12 +56,21 @@ public class Mots {
         return id;
     }
 
+    /**
+     * Insère le mot s'il n'exste pas déjà dans la table
+     * @param mot 
+     */
     public void insertIfNotPresent(String mot) {
         if (!isPresent(mot)) {
             insert(mot);
         }
     }
 
+    /**
+     * Renvoie si le mot existe déjà dans la table
+     * @param mot
+     * @return true ou false
+     */
     public boolean isPresent(String mot) {
         boolean result = false;
         Statement stmt = null;
@@ -83,6 +97,10 @@ public class Mots {
         return result;
     }
 
+    /**
+     * Insère un mot dans la table
+     * @param mot 
+     */
     public void insert(String mot) {
         Statement stmt = null;
         String sql = null;

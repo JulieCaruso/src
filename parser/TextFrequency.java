@@ -23,6 +23,10 @@ public class TextFrequency {
         this.tfMap = new ArrayList<>();
     }
 
+    /**
+     * Créé la map des tfs pour chaque mot de chaque document à partir de la liste des mots
+     * @param docsWordsList liste des mots de chaque document
+     */
     private void createTfMap(ArrayList<ArrayList<String>> docsWordsList) {
         for (ArrayList<String> wordsList : docsWordsList) {
             HashMap<String, Integer> wordsMap = new HashMap<>();
@@ -38,6 +42,14 @@ public class TextFrequency {
         }
     }
     
+    /**
+     * Insère un document_mot dans la table
+     * @param motModel
+     * @param docModel
+     * @param docMotModel
+     * @param CorpusTitles titres des documents du corpus
+     * @param docsWordsList liste des mots de chaque documents
+     */
     public void insertDocMot (Mots motModel, Documents docModel, DocumentMot docMotModel, ArrayList<String> CorpusTitles, ArrayList<ArrayList<String>> docsWordsList) {
         createTfMap(docsWordsList);
         for (int i = 0; i < this.tfMap.size(); i++) {

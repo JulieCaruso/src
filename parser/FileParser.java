@@ -48,6 +48,11 @@ public class FileParser {
         return this.EmptyWords;
     }
 
+    /**
+     * Parse un document et retourne un object Jsoup.Document
+     * @param filename nom du document
+     * @return Jsoup.Document
+     */
     private Document parseFile(String filename) {
         File input = new File(filename);
         Document doc = new Document("");
@@ -59,6 +64,12 @@ public class FileParser {
         return doc;
     }
 
+    /**
+     * Parse le corpus de documents et retourne le corpus = ArrayList<Document>
+     * Insère les documents dans la base de données
+     * @param docModel
+     * @return corpus
+     */
     public ArrayList<Document> parseCorpus(Documents docModel) {
         File dir = new File(CORPUS_FOLDER);
         File[] directoryListing = dir.listFiles();
@@ -72,6 +83,10 @@ public class FileParser {
         return this.Corpus;
     }
 
+    /**
+     * Parse le fichier des mots vides et crééune hashmap d'emptywords
+     * @return HashMap<String, String>
+     */
     public HashMap<String, String> parseEmptyWords() {
         // lecture du fichier texte 
         try {

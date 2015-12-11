@@ -23,6 +23,11 @@ public class Documents {
         this.conn = connection;
     }
     
+    /**
+     * Renvoie l'id d'un document
+     * @param name nom du document
+     * @return id_document
+     */
     public int getId(String name) {
         int id = 0;
         Statement stmt = null;
@@ -48,6 +53,10 @@ public class Documents {
         return id;
     }
 
+    /**
+     * Insère un document dans documents
+     * @param doc_name nom du document
+     */
     public void insert(String doc_name) {
         Statement stmt = null;
         String sql = null;
