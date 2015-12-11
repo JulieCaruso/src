@@ -8,7 +8,6 @@ package parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
-import model.DocumentMot;
 import model.Mots;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,9 +19,8 @@ import org.jsoup.select.Elements;
  */
 public class TextualInformation {
 
-    // espaces enlevés aussi
+    // pattern pour regexp
     private static final Pattern PUNCTUATION = Pattern.compile("[\\]\\[(){} ,.;\\-:!?&@<>|'%€–/[0-9]©]");
-
     private ArrayList<ArrayList<String>> CorpusWords;
 
     public TextualInformation() {
