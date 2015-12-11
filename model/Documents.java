@@ -28,7 +28,7 @@ public class Documents {
         String sql = null;
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO documents (id_document, name_document) VALUES (" + Documents.nextId + ", '" + doc_name + "')";;
+            sql = "INSERT INTO documents (name_document) VALUES ('" + doc_name + "')";;
             stmt.execute(sql);
             stmt.close();    
         } catch (SQLException ex) {

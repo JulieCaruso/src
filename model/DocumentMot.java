@@ -11,10 +11,6 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Kapouter
- */
 public class DocumentMot {
 
     private Connection conn;
