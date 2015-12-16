@@ -39,7 +39,7 @@ public class CinemaSearch {
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
         TextFrequency tf = new TextFrequency();
-        Search s = new Search();
+        Search s = new Search(ti);
         // Parsing corpus et empty words
         ArrayList<Document> Corpus = p.parseCorpus(docModel);
         HashMap<String, String> EmptyWords = p.parseEmptyWords();

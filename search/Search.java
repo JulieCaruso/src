@@ -8,9 +8,11 @@ package search;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import model.Documents;
 import model.Mots;
 import model.DocumentMot;
+import parser.TextualInformation;
 
 /**
  *
@@ -18,6 +20,13 @@ import model.DocumentMot;
  */
 public class Search {
 
+    private TextualInformation ti ; 
+    
+    /* constructor */
+    public Search(TextualInformation ti) {
+        this.ti = ti;
+    }
+    
     /* recherche vectorielle pour tous les doc pour 1 req */
     public HashMap<String,Double> vectorialSearch(ArrayList<String> corpusTitles, ArrayList<String> wordsReq, Documents docModel, Mots motModel, DocumentMot docMotModel) {
         // calcul de la dist de cos pour chaque doc/req (x docs, 1 req)
@@ -38,6 +47,17 @@ public class Search {
         return cosDoc;
     }
     
-    // seuil pour la pertinence des documents !!!!!!!!!!!!!!!!!!!!!!
-    
+    /* Gives the pertinence of all the documents in a HashMap */ 
+    public HashMap<String,Integer> pertinence(HashMap<String,Double> cosDoc) {
+        HashMap<String,Integer> pertDoc = new HashMap<>();
+        for (Entry<String, Double> entry : cosDoc.entrySet()) {
+            if (entry.getValue() >= 0.5) {
+                pertDoc.put(entry.getKey(), 1);
+            } else {
+                pertDoc.put(entry.getKey(), 0);
+            }
+        }
+        return pertDoc;
+    }
+
 }
