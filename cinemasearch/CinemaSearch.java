@@ -34,10 +34,13 @@ public class CinemaSearch {
         
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
-        Search s = new Search();
+
+        TextFrequency tf = new TextFrequency();
+        Search s = new Search(ti);
+        // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-        chargementDonneesDB(conn, EmptyWords, p, ti);
+        //chargementDonneesDB(conn, EmptyWords, p, ti);
 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
@@ -59,7 +62,6 @@ public class CinemaSearch {
         // instanciation des outils
         
         TextFrequency tf = new TextFrequency();
-        Search s = new Search();
         // Parsing corpus et empty words
         ArrayList<Document> Corpus = p.parseCorpus(docModel);
 
