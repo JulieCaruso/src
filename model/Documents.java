@@ -6,6 +6,7 @@
 package model;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +54,31 @@ public class Documents {
             }
         }
         return id;
+    }
+    
+    public ArrayList<String> getCorpusTitles() {
+        Statement stmt = null;
+        String sql = null;
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM documents";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                result.add(rs.getString("name_document"));
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Mots.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+        }
+        return result;
     }
 
     /**

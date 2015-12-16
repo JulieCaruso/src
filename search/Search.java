@@ -60,4 +60,6 @@ public class Search {
         return pertDoc;
     }
 
+    //public HashMap<String,Integer> resolveQuery (String query, )
+    
 }

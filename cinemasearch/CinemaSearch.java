@@ -40,7 +40,7 @@ public class CinemaSearch {
         // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-        //chargementDonneesDB(conn, EmptyWords, p, ti);
+        chargementDonneesDB(conn, EmptyWords, p, ti);
 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
