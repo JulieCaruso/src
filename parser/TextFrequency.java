@@ -56,7 +56,7 @@ public class TextFrequency {
         for (int i = 0; i < this.tfMap.size(); i++) {
             HashMap<String, Integer> wordsMap = tfMap.get(i);
             for (String mot : wordsMap.keySet()) {
-                int id_mot = motModel.getId(mot);
+                //int id_mot = motModel.getId(mot);
                 int id_document = docModel.getId(CorpusTitles.get(i));
                 //docMotModel.insert(id_document, id_mot, wordsMap.get(mot));
                 tfModel.insert(id_document, mot, wordsMap.get(mot));
