@@ -22,20 +22,25 @@ public class Tf {
         this.conn = connection;
         truncate();
     }
-    
+
     /**
-     * 
+     *
      * @param doc_name nom du document
      * @param mot
-     * @param tf 
+     * @param tf
      */
     public void insert(int id_doc, String mot, int tf) {
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         String sql = null;
         try {
-            stmt = conn.createStatement();
-            sql = "INSERT INTO tf (id_document, mot, tf) VALUES (" + id_doc + ", '" + mot + "', " + tf + ")";
-            stmt.execute(sql);
+//            stmt = conn.createStatement();
+//            sql = "INSERT INTO tf (id_document, mot, tf) VALUES (" + id_doc + ", '" + mot + "', " + tf + ")";
+//            stmt.execute(sql);
+            stmt = conn.prepareStatement("insert into tf (id_document, mot, tf) values(?, ?, ?)");
+            stmt.setInt(1, id_doc);
+            stmt.setString(2, mot);
+            stmt.setInt(3, tf);
+            stmt.executeUpdate();
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(Documents.class.getName()).log(Level.SEVERE, null, ex);
@@ -48,9 +53,10 @@ public class Tf {
             }
         }
     }
-    
+
     /**
      * Retourne le tf de la ligne
+     *
      * @param id_document
      * @param mot
      * @return tf
@@ -79,9 +85,10 @@ public class Tf {
         }
         return tf;
     }
-    
+
     /**
      * On ajoute tous les tfs des mots d'une requête contenus dans un document
+     *
      * @param mots liste des mots d'une requete
      * @param docModel modele de la table documents
      * @param doc_name nom du document
@@ -95,9 +102,11 @@ public class Tf {
         }
         return result;
     }
-    
+
     /**
-     * Pour un document donné, renvoie la somme de tous les tf des mots contenus dans ce document
+     * Pour un document donné, renvoie la somme de tous les tf des mots contenus
+     * dans ce document
+     *
      * @param doc_name nom du document
      * @param docModel modele de la table documents
      * @return somme des tfs
