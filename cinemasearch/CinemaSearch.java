@@ -36,6 +36,8 @@ public class CinemaSearch {
         TextualInformation ti = new TextualInformation();
         Search s = new Search();
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
+        
+        chargementDonneesDB(conn, EmptyWords, p, ti);
 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
@@ -49,7 +51,7 @@ public class CinemaSearch {
         dbConn.disconnectDb(conn);
     }
 
-    public void chargementDonneesDB(Connection conn, HashMap<String, String> EmptyWords, FileParser p, TextualInformation ti) {
+    public static void chargementDonneesDB(Connection conn, HashMap<String, String> EmptyWords, FileParser p, TextualInformation ti) {
         // création des modèles des tables
         Documents docModel = new Documents(conn);
         Mots motModel = new Mots(conn);
