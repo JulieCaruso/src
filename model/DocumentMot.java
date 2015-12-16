@@ -19,7 +19,6 @@ public class DocumentMot {
 
     public DocumentMot(Connection connection) {
         this.conn = connection;
-        truncate();
     }
 
     /**

@@ -13,6 +13,7 @@ import parser.TextualInformation;
 import parser.TextFrequency;
 import db.DbConnection;
 import java.sql.Connection;
+import java.util.Map;
 import model.*;
 import search.Search;
 
@@ -34,6 +35,7 @@ public class CinemaSearch {
         
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
+        Documents docModel = new Documents(conn);
         Tf tfModel = new Tf(conn);
 
         TextFrequency tf = new TextFrequency();
@@ -41,27 +43,33 @@ public class CinemaSearch {
         // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-        chargementDonneesDB(conn, EmptyWords, p, ti, tfModel);
+       // chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);
 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
         ArrayList<String> rq = ti.parseRequete(EmptyWords, req);
-        for (String w : rq) {
-            System.out.println(w);
+        HashMap<String,Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), rq, tfModel, docModel);
+        HashMap<String,Integer> pertDoc = s.pertinence(cosDoc);
+        System.out.println("Taille du corpusDoc : " + docModel.getCorpusTitles().size());
+        System.out.println("Taille de la map cosDoc : " + cosDoc.size());
+        System.out.println("Taille de la map pertDoc : " + pertDoc.size());
+        for (Map.Entry<String, Integer> entry : pertDoc.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
-//        HashMap<String,Double> cosDoc = s.vectorialSearch(p.getCorpusTitles(), rq, docModel, motModel, docMotModel);
-//        System.out.println(cosDoc);
 
         dbConn.disconnectDb(conn);
     }
 
-    public static void chargementDonneesDB(Connection conn, HashMap<String, String> EmptyWords, FileParser p, TextualInformation ti, Tf tfModel) {
+    public static void chargementDonneesDB(Connection conn, HashMap<String, String> EmptyWords, FileParser p, TextualInformation ti, Tf tfModel, Documents docModel) {
         // création des modèles des tables
-        Documents docModel = new Documents(conn);
         Mots motModel = new Mots(conn);
         DocumentMot docMotModel = new DocumentMot(conn);
-        // instanciation des outils
+        motModel.truncate();
+        docMotModel.truncate();
+        docModel.truncate();
+        tfModel.truncate();
         
+        // instanciation des outils
         TextFrequency tf = new TextFrequency();
         // Parsing corpus et empty words
         ArrayList<Document> Corpus = p.parseCorpus(docModel);

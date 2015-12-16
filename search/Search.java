@@ -29,7 +29,7 @@ public class Search {
     }
     
     /* recherche vectorielle pour tous les doc pour 1 req */
-    public HashMap<String,Double> vectorialSearch(ArrayList<String> corpusTitles, ArrayList<String> wordsReq, Tf tfModel, Documents docModel, Mots motModel, DocumentMot docMotModel) {
+    public HashMap<String,Double> vectorialSearch(ArrayList<String> corpusTitles, ArrayList<String> wordsReq, Tf tfModel, Documents docModel) {
         // calcul de la dist de cos pour chaque doc/req (x docs, 1 req)
         // = |D & Q|/(sqrt(|D|)*sqrt(|Q|))
         // 
@@ -41,9 +41,7 @@ public class Search {
         double cos = 0;
         for (String title : corpusTitles) {
             pv = tfModel.produitVectorielDocMots(wordsReq, docModel, title);
-            //pv = docMotModel.produitVectorielDocMots(wordsReq, docModel, motModel, title);
             tfDoc = tfModel.getTfDoc(title, docModel);
-            //tfDoc = docMotModel.getTfDoc(title, docModel);
             cos = pv/(sqrt(tfDoc)*sqrt(sizeReq));
             cosDoc.put(title, cos);
         }
@@ -63,6 +61,11 @@ public class Search {
         return pertDoc;
     }
 
-    //public HashMap<String,Integer> resolveQuery (String query, )
+    // Probleme : besoin du corpusTitles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Exporter résultat dans un fichier txt ???????????????????????
+    
+    /*public HashMap<String,Integer> resolveQuery (String query, ) {
+        
+    }*/
     
 }

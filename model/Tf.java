@@ -20,7 +20,6 @@ public class Tf {
 
     public Tf(Connection connection) {
         this.conn = connection;
-        truncate();
     }
 
     /**
@@ -33,9 +32,6 @@ public class Tf {
         PreparedStatement stmt = null;
         String sql = null;
         try {
-//            stmt = conn.createStatement();
-//            sql = "INSERT INTO tf (id_document, mot, tf) VALUES (" + id_doc + ", '" + mot + "', " + tf + ")";
-//            stmt.execute(sql);
             stmt = conn.prepareStatement("insert into tf (id_document, mot, tf) values(?, ?, ?)");
             stmt.setInt(1, id_doc);
             stmt.setString(2, mot);
@@ -66,8 +62,13 @@ public class Tf {
         Statement stmt = null;
         String sql = null;
         try {
+//            stmt = conn.prepareStatement("select * from tf where id_document, mot like (?, ?)");
+//            stmt.setInt(1, id_document);
+//            stmt.setString(2, mot);
+//            ResultSet rs = stmt.executeQuery();
+//            stmt.close();
             stmt = conn.createStatement();
-            sql = "SELECT * FROM tf WHERE id_document, mot LIKE " + id_document + ", '" + mot + "'";
+            sql = "SELECT * FROM tf WHERE id_document = "+ id_document +" and mot = '" + mot + "'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 tf = rs.getInt("tf");

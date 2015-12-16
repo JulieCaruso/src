@@ -24,7 +24,6 @@ public class Mots {
     public Mots(Connection connection) {
         this.nextId = 1;
         this.conn = connection;
-        truncate();
     }
 
     /**
