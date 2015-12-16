@@ -34,13 +34,14 @@ public class CinemaSearch {
         
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
+        Tf tfModel = new Tf(conn);
 
         TextFrequency tf = new TextFrequency();
         Search s = new Search(ti);
         // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-        chargementDonneesDB(conn, EmptyWords, p, ti);
+        chargementDonneesDB(conn, EmptyWords, p, ti, tfModel);
 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
@@ -54,7 +55,7 @@ public class CinemaSearch {
         dbConn.disconnectDb(conn);
     }
 
-    public static void chargementDonneesDB(Connection conn, HashMap<String, String> EmptyWords, FileParser p, TextualInformation ti) {
+    public static void chargementDonneesDB(Connection conn, HashMap<String, String> EmptyWords, FileParser p, TextualInformation ti, Tf tfModel) {
         // création des modèles des tables
         Documents docModel = new Documents(conn);
         Mots motModel = new Mots(conn);
@@ -70,8 +71,8 @@ public class CinemaSearch {
         ArrayList<ArrayList<String>> cleanWordsList = ti.cleanCorpusWords(EmptyWords, docsWordsList);
 
         //Ajout des mots du corpus et du lien doc-mot en base de données
-        ti.insertCorpusWordsInDB(motModel, cleanWordsList);
-        tf.insertDocMot(motModel, docModel, docMotModel, p.getCorpusTitles(), cleanWordsList);
+        //ti.insertCorpusWordsInDB(motModel, cleanWordsList);
+        tf.insertDocMot(motModel, docModel, docMotModel, tfModel, p.getCorpusTitles(), cleanWordsList);
     }
 
 }

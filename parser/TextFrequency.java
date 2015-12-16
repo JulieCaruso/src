@@ -10,6 +10,7 @@ import java.util.HashMap;
 import model.DocumentMot;
 import model.Documents;
 import model.Mots;
+import model.Tf;
 
 /**
  *
@@ -50,14 +51,15 @@ public class TextFrequency {
      * @param CorpusTitles titres des documents du corpus
      * @param docsWordsList liste des mots de chaque documents
      */
-    public void insertDocMot (Mots motModel, Documents docModel, DocumentMot docMotModel, ArrayList<String> CorpusTitles, ArrayList<ArrayList<String>> docsWordsList) {
+    public void insertDocMot (Mots motModel, Documents docModel, DocumentMot docMotModel, Tf tfModel, ArrayList<String> CorpusTitles, ArrayList<ArrayList<String>> docsWordsList) {
         createTfMap(docsWordsList);
         for (int i = 0; i < this.tfMap.size(); i++) {
             HashMap<String, Integer> wordsMap = tfMap.get(i);
             for (String mot : wordsMap.keySet()) {
                 int id_mot = motModel.getId(mot);
                 int id_document = docModel.getId(CorpusTitles.get(i));
-                docMotModel.insert(id_document, id_mot, wordsMap.get(mot));
+                //docMotModel.insert(id_document, id_mot, wordsMap.get(mot));
+                tfModel.insert(id_document, mot, wordsMap.get(mot));
             }
         }
         
