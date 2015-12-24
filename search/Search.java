@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import model.Documents;
-import model.Mots;
-import model.DocumentMot;
 import model.Tf;
 import parser.TextualInformation;
 
@@ -52,20 +50,12 @@ public class Search {
     public HashMap<String,Integer> pertinence(HashMap<String,Double> cosDoc) {
         HashMap<String,Integer> pertDoc = new HashMap<>();
         for (Entry<String, Double> entry : cosDoc.entrySet()) {
-            if (entry.getValue() >= 0.5) {
+            if (entry.getValue() >= 0.8) {
                 pertDoc.put(entry.getKey(), 1);
             } else {
                 pertDoc.put(entry.getKey(), 0);
             }
         }
         return pertDoc;
-    }
-
-    // Probleme : besoin du corpusTitles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Exporter résultat dans un fichier txt ???????????????????????
-    
-    /*public HashMap<String,Integer> resolveQuery (String query, ) {
-        
-    }*/
-    
+    }    
 }

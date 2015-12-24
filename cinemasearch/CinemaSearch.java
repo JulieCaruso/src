@@ -13,8 +13,10 @@ import parser.TextualInformation;
 import parser.TextFrequency;
 import db.DbConnection;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.Map;
 import model.*;
+import parser.Evaluator;
 import search.Search;
 
 /**
@@ -35,6 +37,7 @@ public class CinemaSearch {
         
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
+        Evaluator e = new Evaluator();
         Documents docModel = new Documents(conn);
         Tf tfModel = new Tf(conn);
 
@@ -43,7 +46,7 @@ public class CinemaSearch {
         // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         
-       // chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);
+       //chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);
 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
@@ -56,6 +59,10 @@ public class CinemaSearch {
         for (Map.Entry<String, Integer> entry : pertDoc.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+        
+        Double percentage = e.evaluate(pertDoc, 1);
+        DecimalFormat numberFormat = new DecimalFormat("#.00");
+        System.out.println("Pertinence de résultat de la requête : " + numberFormat.format(percentage*100) + "%");
 
         dbConn.disconnectDb(conn);
     }

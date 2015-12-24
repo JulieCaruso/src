@@ -59,10 +59,6 @@ public class TextFrequency {
                 int id_document = docModel.getId(CorpusTitles.get(i));
                 tfModel.insert(id_document, mot, wordsMap.get(mot));
             }
-        }
-        
-        
-        
+        }   
     }
-
 }
