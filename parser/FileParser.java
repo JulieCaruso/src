@@ -49,7 +49,7 @@ public class FileParser {
     }
 
     /**
-     * Parse un document et retourne un object Jsoup.Document
+     * Parse un document et retourne un object de type Jsoup.Document
      * @param filename nom du document
      * @return Jsoup.Document
      */
