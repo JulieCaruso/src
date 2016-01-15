@@ -53,7 +53,7 @@ public class FileParser {
      * @param filename nom du document
      * @return Jsoup.Document
      */
-    private Document parseFile(String filename) {
+    public Document parseFile(String filename) {
         File input = new File(filename);
         Document doc = new Document("");
         try {

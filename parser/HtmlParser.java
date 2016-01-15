@@ -15,17 +15,20 @@ import org.jsoup.select.Elements;
  * @author MC
  */
 public class HtmlParser {
+
     private final String requetesFile = "requetes.html";
-    
-    
+
     public ArrayList<String> generateWords(Document doc) {
-        ArrayList<String> wordsList = new ArrayList();
+        ArrayList<String> keyWordsReqList = new ArrayList();
 
         Element body = doc.body();
         Elements elementsBody = body.getAllElements();
         for (Element e : elementsBody) {
             //recup tous les dl et pour chq dl recup les 2 dt a mettre dans liste requete
+            if (e.nodeName().equals("dl")) {
+                keyWordsReqList.add(e.child(1).text());
+            }
         }
-        return wordsList;
+        return keyWordsReqList;
     }
 }

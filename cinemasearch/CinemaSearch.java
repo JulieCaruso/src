@@ -17,7 +17,10 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import model.*;
 import parser.Evaluator;
+import parser.HtmlParser;
+import reformulator.Reformulator;
 import search.Search;
+import sparqlclient.SparqlClientExample;
 
 /**
  *
@@ -31,10 +34,10 @@ public class CinemaSearch {
     public static void main(String[] args) {
 
         // connection base de données
-        DbConnection dbConn = new DbConnection();
+       /* DbConnection dbConn = new DbConnection();
         dbConn.connectToDb();
         Connection conn = dbConn.getConnection();
-        
+
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
         Evaluator e = new Evaluator();
@@ -45,24 +48,31 @@ public class CinemaSearch {
         Search s = new Search(ti);
         // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
-        
-       //chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);
 
+       //chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel); */
+
+         // essai html parser 
+         FileParser p = new FileParser();
+         HtmlParser hp = new HtmlParser(); 
+         Document d = p.parseFile("requetes.html");
+         hp.generateWords(d);
+         Reformulator r = new Reformulator();
+         r.synonymous("prix");
         // essai requete
-        String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
+      /*  String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
         ArrayList<String> rq = ti.parseRequete(EmptyWords, req);
-        HashMap<String,Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), rq, tfModel, docModel);
-        HashMap<String,Integer> pertDoc = s.pertinence(cosDoc);
+        HashMap<String, Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), rq, tfModel, docModel);
+        HashMap<String, Integer> pertDoc = s.pertinence(cosDoc);
         System.out.println("Taille du corpusDoc : " + docModel.getCorpusTitles().size());
         System.out.println("Taille de la map cosDoc : " + cosDoc.size());
         System.out.println("Taille de la map pertDoc : " + pertDoc.size());
         for (Map.Entry<String, Integer> entry : pertDoc.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
-        
+
         Double percentage = e.evaluate(pertDoc, 1);
         DecimalFormat numberFormat = new DecimalFormat("#.00");
-        System.out.println("Pertinence de résultat de la requête : " + numberFormat.format(percentage*100) + "%");
+        System.out.println("Pertinence de résultat de la requête : " + numberFormat.format(percentage * 100) + "%");
 
         dbConn.disconnectDb(conn);
     }
@@ -75,7 +85,7 @@ public class CinemaSearch {
         docMotModel.truncate();
         docModel.truncate();
         tfModel.truncate();
-        
+
         // instanciation des outils
         TextFrequency tf = new TextFrequency();
         // Parsing corpus et empty words
@@ -87,7 +97,7 @@ public class CinemaSearch {
 
         //Ajout des mots du corpus et du lien doc-mot en base de données
         //ti.insertCorpusWordsInDB(motModel, cleanWordsList);
-        tf.insertDocMot(motModel, docModel, docMotModel, tfModel, p.getCorpusTitles(), cleanWordsList);
+        tf.insertDocMot(motModel, docModel, docMotModel, tfModel, p.getCorpusTitles(), cleanWordsList); */
     }
 
 }
