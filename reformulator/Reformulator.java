@@ -20,15 +20,15 @@ public class Reformulator {
     private ArrayList<String> reformReqList = new ArrayList();
 
     public ArrayList<String> addSynonymousToReq(ArrayList<String> keyWordsReqList) {
-        //copie des mots de la requete dans la liste qui va etre retournee
+        // copie des mots de la requete dans la liste qui va etre retournee
         ArrayList<String> synReqList = new ArrayList(keyWordsReqList);
-        
+
         // recherche des synonymes
         ArrayList<String> synList = new ArrayList();
         for (String word : keyWordsReqList) {
             synList.addAll(getSynonymous(word));
         }
-        
+
         // construction de la liste retournee en ajoutant les synonymes a la liste de mots de depart
         for (String syn : synList) {
             if (synReqList.contains(syn) == false) {
@@ -37,6 +37,40 @@ public class Reformulator {
         }
         System.out.println(synReqList.toString());
         return synReqList;
+    }
+
+    // TODO
+    public ArrayList<String> addInstancesToReq(ArrayList<String> keyWordsReqList) {
+        // copie des mots de la requete dans la liste qui va etre retournee
+        ArrayList<String> instReqList = new ArrayList(keyWordsReqList);
+
+        String property = null;
+        String entity = null;
+        ArrayList<String> instList = new ArrayList();
+
+        // si la requete contient exactement 2 mots
+        if (keyWordsReqList.size() == 2) {
+            // si l'un d'eux est une propriete
+            property = findProperty(keyWordsReqList);
+            if (property != null) {
+                // si l'autre est une entite
+                entity = findEntity(keyWordsReqList);
+                if (entity != null) {
+                    // alors on cherche l'instance (les instances) a ajouter a la requete
+                    instList = getInstance(property, entity);
+
+                    // enrichissement de la requete
+                    for (String inst : instList) {
+                        if (instReqList.contains(inst) == false) {
+                            instReqList.add(inst);
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println(instReqList.toString());
+        return instReqList;
     }
 
     // -----------------------------   SPARQL PART  -------------------------------- //
@@ -86,6 +120,49 @@ public class Reformulator {
         return instList;
     }
 
+    // Si l'un des termes de la requete est une propriete, alors il est retourne (null sinon)
+    public String findProperty(ArrayList<String> keyWordsReqList) {
+        SparqlClient sparqlClient = new SparqlClient("localhost:3030/space");
+        String property = null;
+        for (String keyWord : keyWordsReqList) {
+            // System.out.println("key :" + keyWord);
+            String query = "PREFIX : <http://ontologies.alwaysdata.net/space#>"
+                    + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+                    + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+                    + "ASK WHERE {"
+                    + "?propriete rdfs:label \"" + keyWord + "\"@fr."
+                    + "?entite ?propriete ?res."
+                    + "}";
+            boolean found = sparqlClient.ask(query);
+            if (found) {
+                property = keyWord;
+            }
+        }
+        // System.out.println(property);
+        return property;
+    }
+
+    // Si l'un des termes de la requete est une propriete, alors il est retourne (null sinon)
+    public String findEntity(ArrayList<String> keyWordsReqList) {
+        SparqlClient sparqlClient = new SparqlClient("localhost:3030/space");
+        String entity = null;
+        for (String keyWord : keyWordsReqList) {
+            // System.out.println("key :" + keyWord);
+            String query = "PREFIX : <http://ontologies.alwaysdata.net/space#>"
+                    + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+                    + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+                    + "ASK WHERE {"
+                    + "?entite rdfs:label \"" + keyWord + "\"."
+                    + "?entite ?propriete ?res."
+                    + "}";
+            boolean found = sparqlClient.ask(query);
+            if (found) {
+                entity = keyWord;
+            }
+        }
+        // System.out.println(entity);
+        return entity;
+    }
 
     /*private static void nbPersonnesParPiece(SparqlClient sparqlClient) {
      String query = "PREFIX : <http://www.lamaisondumeurtre.fr#>\n"

@@ -61,9 +61,11 @@ public class CinemaSearch {
          //synList = r.getSynonymous("prix");
         //instList = r.getInstance("lieu naissance", "Omar Sy");
         ArrayList<String> rq = new ArrayList<>();
-        rq.add("prix");
-        rq.add("coucou");
+        rq.add("Omar Sy");
+        rq.add("lieu naissance");
         synList = r.addSynonymousToReq(rq);
+        instList = r.addInstancesToReq(rq);
+        
         // essai requete
       /*  String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
          ArrayList<String> rq = ti.parseRequete(EmptyWords, req);
