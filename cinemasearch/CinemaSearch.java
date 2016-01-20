@@ -63,6 +63,7 @@ public class CinemaSearch {
         ArrayList<String> rq = new ArrayList<>();
         rq.add("Omar Sy");
         rq.add("lieu naissance");
+        rq.add("coucou");
         synList = r.addSynonymousToReq(rq);
         instList = r.addInstancesToReq(rq);
         
