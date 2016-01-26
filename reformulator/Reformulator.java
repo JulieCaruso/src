@@ -22,8 +22,8 @@ public class Reformulator {
     public ArrayList<String> reformulate(ArrayList<String> keyWordsReqList) {
         // copie des mots de la requete dans la liste qui va etre retournee
         ArrayList<String> refReqList = new ArrayList(keyWordsReqList);
-        ArrayList<String> synReqList = new ArrayList<>();
-        ArrayList<String> instReqList = new ArrayList<>();
+        ArrayList<String> synReqList = new ArrayList();
+        ArrayList<String> instReqList = new ArrayList();
 
         // ajout des synonymes
         synReqList = addSynonymousToReq(keyWordsReqList);
@@ -69,9 +69,9 @@ public class Reformulator {
         // copie des mots de la requete dans la liste qui va etre retournee
         ArrayList<String> instReqList = new ArrayList(keyWordsReqList);
 
-        ArrayList<String> property = new ArrayList<>();;
-        ArrayList<String> entity = new ArrayList<>();;
-        ArrayList<String> instList = new ArrayList<>();
+        ArrayList<String> property = new ArrayList();;
+        ArrayList<String> entity = new ArrayList();;
+        ArrayList<String> instList = new ArrayList();
 
         // recherche des proprietes
         property = findProperty(keyWordsReqList);
@@ -233,6 +233,19 @@ public class Reformulator {
                     + "}";
             boolean found = sparqlClient.ask(query);
             if (found) {
+                entity.add(keyWord);
+            }
+            
+            // dans l'autre sens
+            String query2 = "PREFIX : <http://ontologies.alwaysdata.net/space#>"
+                    + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+                    + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+                    + "ASK WHERE {"
+                    + "?res rdfs:label \"" + keyWord + "\"."
+                    + "?entite ?propriete ?res."
+                    + "}";
+            boolean found2 = sparqlClient.ask(query2);
+            if (found2) {
                 entity.add(keyWord);
             }
         }

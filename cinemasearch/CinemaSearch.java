@@ -50,14 +50,17 @@ public class CinemaSearch {
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
         //chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);  
         HtmlParser hp = new HtmlParser();
+        
+        // essai avec la req 0
         Document d = p.parseFile("requetes.html");
-        ArrayList<String> rq = hp.generateWords(d);
-        System.out.println("avant : " + rq.toString());
+        ArrayList<ArrayList<String>> rq = hp.generateWords(d);
+        System.out.println("avant : " + rq.get(4).toString());
         Reformulator r = new Reformulator();
         ArrayList<String> refReqList = new ArrayList<>();
-        refReqList = r.reformulate(rq);
+        refReqList = r.reformulate(rq.get(4));
+        System.out.println("après : " + refReqList.toString());
         
-        ArrayList<String> synList = new ArrayList<>();
+        /*ArrayList<String> synList = new ArrayList<>();
         synList = r.getSynonymous("prix");
         ArrayList<String> instList = new ArrayList<>();
         instList = r.getInstance("lieu naissance", "Omar Sy");
@@ -69,12 +72,13 @@ public class CinemaSearch {
         rq.add("a pour membre de jury");
         refReqList = r.reformulate(rq);
         System.out.println("avant : " + rq.toString());
-        System.out.println("apres : " + refReqList.toString());
+        System.out.println("apres : " + refReqList.toString()); 
         // essai requete
         String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
-        ArrayList<String> rq = ti.parseRequete(EmptyWords, req);
+        ArrayList<String> rq = ti.parseRequete(EmptyWords, req); */
 
-        HashMap< String, Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), rq, tfModel, docModel);
+        //HashMap< String, Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), rq.get(4), tfModel, docModel);
+        HashMap< String, Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), refReqList, tfModel, docModel);
         HashMap<String, Integer> pertDoc = s.pertinence(cosDoc);
         System.out.println("Taille du corpusDoc : " + docModel.getCorpusTitles().size());
         System.out.println("Taille de la map cosDoc : " + cosDoc.size());
@@ -83,7 +87,7 @@ public class CinemaSearch {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
 
-        Double percentage = e.evaluate(pertDoc, 1);
+        Double percentage = e.evaluate(pertDoc, 5);
         DecimalFormat numberFormat = new DecimalFormat("#.00");
         System.out.println("Pertinence de résultat de la requête : " + numberFormat.format(percentage * 100) + "%");
 
