@@ -75,17 +75,14 @@ public class Reformulator {
 
         // recherche des proprietes
         property = findProperty(keyWordsReqList);
-        //System.out.println("proprietes : " + property);
         if (property != null) {
             // recherche des entites
             entity = findEntity(keyWordsReqList);
-            //System.out.println("entites : " + entity);
             if (entity != null) {
                 // alors on cherche les instances a ajouter a la requete
                 for (String e : entity) {
                     for (String p : property) {
                         instList = getInstance(p, e);
-                        //System.out.println("instances : " + instList);
                         // enrichissement de la requete
                         for (String inst : instList) {
                             if (instReqList.contains(inst) == false) {
@@ -159,7 +156,6 @@ public class Reformulator {
         ArrayList<String> instList = new ArrayList<>();
         SparqlClient sparqlClient = new SparqlClient("localhost:3030/space");
 
-        // Pour les instances : fonctionne
         String query = "PREFIX : <http://ontologies.alwaysdata.net/space#>"
                 + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
                 + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"

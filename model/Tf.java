@@ -5,6 +5,7 @@
  */
 package model;
 
+import static java.lang.Math.log;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -68,7 +69,7 @@ public class Tf {
 //            ResultSet rs = stmt.executeQuery();
 //            stmt.close();
             stmt = conn.createStatement();
-            sql = "SELECT * FROM tf WHERE id_document = "+ id_document +" and mot = '" + mot + "'";
+            sql = "SELECT * FROM tf WHERE id_document = " + id_document + " and mot = '" + mot + "'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 tf = rs.getInt("tf");
@@ -100,6 +101,59 @@ public class Tf {
         for (String mot : mots) {
             int id_document = docModel.getId(doc_name);
             result += getTf(id_document, mot);
+        }
+        return result;
+    }
+
+    /**
+     * On ajoute tous les tfs des mots d'une requête contenus dans un document
+     *
+     * @param mots liste des mots d'une requete
+     * @param docModel modele de la table documents
+     * @param doc_name nom du document
+     * @return somme des tfs
+     */
+    public int produitVectorielDocMotsIdf(ArrayList<String> mots, Documents docModel, String doc_name, int nbDocuments) {
+        double result = 0.;
+        for (String mot : mots) {
+            int id_document = docModel.getId(doc_name);
+            double nbDocs = (double) nbDocs(mot);
+            double idf = 1;
+            if (nbDocs > 0) {
+                idf = log((double) nbDocuments / nbDocs);
+            }
+            result += idf * getTf(id_document, mot);
+        }
+        return (int) Math.round(result);
+    }
+
+    /**
+     * On calcule le nombre de documents où le mot apparait
+     *
+     * @param mot
+     * @return nombre de documents
+     */
+    public int nbDocs(String mot) {
+        int result = 0;
+        Statement stmt = null;
+        String sql = null;
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM tf WHERE mot LIKE '" + mot + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                result++;
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Mots.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
         }
         return result;
     }

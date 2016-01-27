@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cinemasearch;
 
 import java.util.ArrayList;
@@ -13,20 +8,21 @@ import parser.TextualInformation;
 import parser.TextFrequency;
 import db.DbConnection;
 import java.sql.Connection;
-import java.text.DecimalFormat;
-import java.util.Map;
 import model.*;
 import parser.Evaluator;
 import parser.HtmlParser;
 import reformulator.Reformulator;
 import search.Search;
-import sparqlclient.SparqlClientExample;
 
-/**
- *
- * @author Kapouter
- */
 public class CinemaSearch {
+
+    // commence à 0, termine à 8
+    private static final int idRequete = 7;
+    // 0 : modele vectoriel, 1 : modele vectoriel pondere par idf
+    private static final int methode = 0;
+    // 0 : pas de reformulation des requêtes, 1 sinon
+    private static final int reformulation = 0;
+    private static final String fichierRequetes = "requetes.html";
 
     /**
      * @param args the command line arguments
@@ -37,59 +33,55 @@ public class CinemaSearch {
         DbConnection dbConn = new DbConnection();
         dbConn.connectToDb();
         Connection conn = dbConn.getConnection();
-
+        // initialisation outils
         FileParser p = new FileParser();
         TextualInformation ti = new TextualInformation();
         Evaluator e = new Evaluator();
         Documents docModel = new Documents(conn);
         Tf tfModel = new Tf(conn);
-
         TextFrequency tf = new TextFrequency();
         Search s = new Search(ti);
+        HtmlParser hp = new HtmlParser();
+        Reformulator r = new Reformulator();
+
         // Parsing corpus et empty words
         HashMap<String, String> EmptyWords = p.parseEmptyWords();
-        //chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);  
-        HtmlParser hp = new HtmlParser();
-        
-        // essai avec la req 0
-        Document d = p.parseFile("requetes.html");
-        ArrayList<ArrayList<String>> rq = hp.generateWords(d);
-        System.out.println("avant : " + rq.get(4).toString());
-        Reformulator r = new Reformulator();
-        ArrayList<String> refReqList = new ArrayList<>();
-        refReqList = r.reformulate(rq.get(4));
-        System.out.println("après : " + refReqList.toString());
-        
-        /*ArrayList<String> synList = new ArrayList<>();
-        synList = r.getSynonymous("prix");
-        ArrayList<String> instList = new ArrayList<>();
-        instList = r.getInstance("lieu naissance", "Omar Sy");
-        ArrayList<String> rq = new ArrayList<>();
-        rq.add("Omar Sy");
-        rq.add("lieu naissance");
-        rq.add("Julie Caruso");
-        rq.add("coucou");
-        rq.add("a pour membre de jury");
-        refReqList = r.reformulate(rq);
-        System.out.println("avant : " + rq.toString());
-        System.out.println("apres : " + refReqList.toString()); 
-        // essai requete
-        String req = "Quelles sont les personnes impliquées dans le film Intouchables?";
-        ArrayList<String> rq = ti.parseRequete(EmptyWords, req); */
 
-        //HashMap< String, Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), rq.get(4), tfModel, docModel);
-        HashMap< String, Double> cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), refReqList, tfModel, docModel);
-        HashMap<String, Integer> pertDoc = s.pertinence(cosDoc);
-        System.out.println("Taille du corpusDoc : " + docModel.getCorpusTitles().size());
-        System.out.println("Taille de la map cosDoc : " + cosDoc.size());
-        System.out.println("Taille de la map pertDoc : " + pertDoc.size());
-        for (Map.Entry<String, Integer> entry : pertDoc.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+        // chargement des mots dans la db
+        // chargementDonneesDB(conn, EmptyWords, p, ti, tfModel, docModel);  
+        // recupération requete et traitement
+        Document d = p.parseFile(fichierRequetes);
+
+        // generation de la requete parsee, avec ou sans reformulation
+        ArrayList<ArrayList<String>> rq = hp.generateWords(d);
+        ArrayList<String> reqFinal = new ArrayList();
+        if (reformulation == 0) {
+            reqFinal = ti.parseRequete(EmptyWords, String.join(" ", rq.get(idRequete)));
+            System.out.println("Requete sans reformulation : " + rq.get(idRequete).toString());
+            System.out.println("Requete parsée : " + reqFinal);
+        } else if (reformulation == 1) {
+            ArrayList<String> refReqList = r.reformulate(rq.get(idRequete));
+            reqFinal = ti.parseRequete(EmptyWords, String.join(" ", rq.get(idRequete)));
+            System.out.println("Requete avant reformulation : " + rq.get(idRequete).toString());
+            System.out.println("Requete après reformulation : " + refReqList.toString());
+            System.out.println("Requete parsée : " + reqFinal);
         }
 
-        Double percentage = e.evaluate(pertDoc, 5);
-        DecimalFormat numberFormat = new DecimalFormat("#.00");
-        System.out.println("Pertinence de résultat de la requête : " + numberFormat.format(percentage * 100) + "%");
+        // calcul pertinence des documents
+        HashMap< String, Double> cosDoc = new HashMap<>();
+        // calcul vectoriel
+        if (methode == 0) {
+            System.out.println("Modele vectoriel, requete " + (idRequete + 1));
+            cosDoc = s.vectorialSearch(docModel.getCorpusTitles(), reqFinal, tfModel, docModel);
+        } // calcul vectoriel pondéré avec idf
+        else if (methode == 1) {
+            System.out.println("Modele vectoriel pondere par idf, requete " + (idRequete + 1));
+            cosDoc = s.vectorialSearchIdf(docModel.getCorpusTitles(), reqFinal, tfModel, docModel);
+        }
+
+        HashMap<String, Integer> pertDoc = s.pertinence(cosDoc, 0.6);
+        // evaluation de la requete
+        e.evaluate(pertDoc, idRequete + 1);
 
         dbConn.disconnectDb(conn);
     }

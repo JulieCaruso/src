@@ -25,7 +25,7 @@ public class Documents {
     }
 
     /**
-     * Renvoie l'id d'un document
+     * Renvoie l'id d'un document a partir de son nom
      *
      * @param name nom du document
      * @return id_document
@@ -53,6 +53,35 @@ public class Documents {
             }
         }
         return id;
+    }
+    
+    /**
+     * Retourne le nombre de documents dans la table
+     * @return 
+     */
+    public int getNbDocs() {
+        int result = 0;
+        Statement stmt = null;
+        String sql = null;
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT COUNT(*) AS total FROM documents";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                result = rs.getInt("total");
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Mots.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+        }
+        return result;
     }
     
     public ArrayList<String> getCorpusTitles() {
